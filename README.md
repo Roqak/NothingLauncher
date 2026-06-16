@@ -1,35 +1,66 @@
-# NOTHING OS LAUNCHER
+# Nothing OS Launcher
 
-Product Requirements Document
-A complete Nothing OS experience on any Android device
-Version
-Status
-Date
-1.0.0
-Draft – Ready for Engineering Review
-June 2025
+A pixel-accurate, monochrome Android home screen replacement that brings the Nothing OS aesthetic to any Android 8.0+ device.
+
+[![Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/Roqak/NothingLauncher/releases)
+
+## Features
+
+- **Nothing OS home screen** — 4×6 grid, monochrome icons, spring-physics animations.
+- **App drawer** — swipe up, real-time search, recent apps, Nothing-style alphabet scroller.
+- **Native widgets** — NDot clock, compact clock, date card, battery, weather, music, step counter, shortcuts.
+- **Settings** — grid size, app labels, dock slots; persisted with DataStore.
+- **Live wallpaper** — bundled "Dot Field" animated dot-matrix wallpaper service.
+- **Gestures** — swipe up/down, double-tap to sleep (device admin), long-press for edit mode.
+- **Icon system** — monochrome adaptive-icon layer + grayscale binarization fallback + icon pack API.
+
+## Tech Stack
+
+- Kotlin 2.0.20
+- Jetpack Compose
+- Hilt (DI)
+- Room + DataStore
+- LauncherApps / AppWidgetHost / WallpaperService
+
+## Project Structure
+
+- `:app` — Launcher entry point, manifest, DI graph
+- `:core:theme` — Colors, typography, dimens, motion tokens
+- `:core:icons` — Monochrome icon processor, icon pack API
+- `:core:data` — App repository, Room DB, DataStore preferences
+- `:core:utils` — Dispatchers, haptics
+- `:launcher:home` — Home screen grid, pages, gestures
+- `:launcher:drawer` — App drawer, search, alphabet scroller
+- `:launcher:dock` — Bottom dock
+- `:launcher:widgets` — Native widgets
+- `:launcher:wallpaper` — Live wallpaper engine + picker UI
+- `:launcher:settings` — Launcher settings UI
+
+## Installation
+
+1. Download the signed APK from the [Releases](https://github.com/Roqak/NothingLauncher/releases) page.
+2. Sideload the APK:
+   ```bash
+   adb install NothingLauncher-v1.0.0.apk
+   ```
+3. Press Home and choose **Nothing Launcher** as the default.
+
+> **Note:** Double-tap to sleep requires Device Admin permission; the launcher will guide you to enable it.
+
+## Building Locally
+
+```bash
+./gradlew :app:assembleDebug
+```
+
+## CI / Release
+
+A GitHub Actions workflow (`.github/workflows/build-and-release.yml`) is configured to build and sign the APK on every tag starting with `v`. It is currently paused because the associated GitHub account has a billing lock; once resolved, the workflow will automatically attach the signed APK to releases.
+
+## License
+
+This is an independent open-source project. Nothing OS and NDot are trademarks of Nothing Technology Ltd. No proprietary Nothing assets are included.
 
 ---
 
-## 1. Executive Summary
-This document defines the complete product requirements for the Nothing OS Launcher – a fully featured Android home screen replacement that brings the iconic Nothing OS aesthetic and experience to any Android device running Android 8.0 (Oreo) or above.
-
-Nothing OS is celebrated for its monochrome, dot-matrix-inspired design language, radical minimalism, and a focus on intentional UI. This launcher does not attempt to be a superficial clone – it is a faithful, production-quality implementation of every observable Nothing OS software component, from the home screen grid to the app drawer, widget system, quick-settings panel aesthetics, and system font integration.
-
-**What we are building**: A standalone Android launcher APK (no root required, no system modifications) that replaces the default home screen and delivers a 100% Nothing OS software look-and-feel. It will be distributed as a sideloadable APK and optionally published to the Google Play Store.
-
-### 1.1 Goals
-- Deliver a pixel-accurate reproduction of the Nothing OS home screen, app drawer, and launcher widgets.
-- Use monochrome iconography (black & white adaptive icons with outline/dot-matrix aesthetics).
-- Implement the NDot / dot-matrix clock and font system throughout.
-- Support live wallpapers and static wallpapers matching Nothing's default selection.
-- Achieve performance parity with stock Android (< 16ms frame budget, no jank).
-- Require zero root access and no system-level modifications.
-- Target Android 8.0+ (API 26+), optimized for Android 12–16.
-
-### 1.2 Non-Goals
-- Glyph Interface control (hardware-level LED strips – not replicable without Nothing hardware).
-- Nothing OS lock screen (requires system-level integration).
-- Nothing's notification shade / quick settings panel (restricted by Android).
-- Always-On Display customization.
-- Replicating Nothing OS settings menus.
+*Read the full Product Requirements Document in [`NOTHING_OS_LAUNCHER_PRD.md`](NOTHING_OS_LAUNCHER_PRD.md).*
