@@ -20,9 +20,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Cache Gradle
         uses: actions/cache@v4
         with:
@@ -36,6 +33,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew :app:assembleRelease
 
+      - name: Upload unsigned APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nothing-launcher-unsigned
+          path: app/build/outputs/apk/release/*.apk
+
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -46,10 +49,10 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-      - name: Upload APK artifact
+      - name: Upload signed APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nothing-launcher-apk
+          name: nothing-launcher-signed
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Create GitHub Release
