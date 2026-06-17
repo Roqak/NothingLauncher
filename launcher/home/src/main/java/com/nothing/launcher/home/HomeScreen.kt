@@ -70,19 +70,28 @@ fun HomeScreen(
                     state = pagerState,
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
-                    HomePage(
-                        items = state.items.filter { it.page == page },
-                        geometry = geometry,
-                        onAppClick = { viewModel.onAppLaunched(it.app) },
-                        onAppLongClick = { viewModel.startDrag(it) }
-                    )
+                    val pageItems = state.items.filter { it.page == page }
+                    if (pageItems.isEmpty() && page == 0) {
+                        HomeEmptyState(onOpenDrawer = { isDrawerOpen = true })
+                    } else {
+                        HomePage(
+                            items = pageItems,
+                            geometry = geometry,
+                            onAppClick = { viewModel.onAppLaunched(it.app) },
+                            onAppLongClick = { viewModel.startDrag(it) }
+                        )
+                    }
                 }
             }
         }
 
         if (isDrawerOpen) {
             AppDrawer(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                onAddToHome = { app ->
+                    viewModel.addAppToHome(app)
+                    isDrawerOpen = false
+                }
             )
         }
 

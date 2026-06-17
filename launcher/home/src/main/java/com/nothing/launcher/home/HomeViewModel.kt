@@ -70,6 +70,30 @@ class HomeViewModel @Inject constructor(
         dragState.value = DragState.Idle
     }
 
+
+    fun addAppToHome(app: AppModel) {
+        viewModelScope.launch {
+            val cols = preferences.gridColumns.stateIn(viewModelScope, SharingStarted.Eagerly, 4).value
+            val rows = preferences.gridRows.stateIn(viewModelScope, SharingStarted.Eagerly, 6).value
+            val items = homeRepository.observeHomeItems().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList()).value.toMutableList()
+            val firstEmpty = (0 until rows).firstNotNullOfOrNull { y ->
+                (0 until cols).firstNotNullOfOrNull { x ->
+                    if (items.none { it.page == 0 && it.cellX == x && it.cellY == y }) x to y else null
+                }
+            }
+            val (x, y) = firstEmpty ?: (cols - 1 to rows - 1)
+            items.add(
+                HomeItem.AppIcon(
+                    id = "${app.packageName}/${app.activityName}",
+                    app = app,
+                    cellX = x,
+                    cellY = y,
+                    page = 0
+                )
+            )
+            persistLayout(items)
+        }
+    }
     fun persistLayout(items: List<HomeItem>) {
         viewModelScope.launch {
             homeRepository.saveItems(items)

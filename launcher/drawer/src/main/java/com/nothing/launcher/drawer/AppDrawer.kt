@@ -1,6 +1,8 @@
+@file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 package com.nothing.launcher.drawer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,11 +45,13 @@ import com.nothing.core.icons.MonochromeAppIcon
 @Composable
 fun AppDrawer(
     modifier: Modifier = Modifier,
-    viewModel: DrawerViewModel = viewModel()
+    viewModel: DrawerViewModel = viewModel(),
+    onAddToHome: ((AppModel) -> Unit)? = null
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var activeLetter by remember { mutableStateOf<Char?>(null) }
+    var menuApp by remember { mutableStateOf<AppModel?>(null) }
 
     Box(
         modifier = modifier
@@ -106,7 +110,8 @@ fun AppDrawer(
                             onClick = {
                                 viewModel.onAppLaunched(app)
                                 context.launchApp(app)
-                            }
+                            },
+                            onLongClick = { menuApp = app }
                         )
                     }
                 }
@@ -116,6 +121,14 @@ fun AppDrawer(
                     onLetterSelected = { activeLetter = it }
                 )
             }
+        }
+
+        menuApp?.let { app ->
+            AppMenuDialog(
+                app = app,
+                onDismiss = { menuApp = null },
+                onAddToHome = onAddToHome
+            )
         }
     }
 }
@@ -192,18 +205,24 @@ private fun RecentAppsRow(
 @Composable
 private fun AppDrawerRow(
     app: AppModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
     ) {
         MonochromeAppIcon(
             app = app,
             size = 48.dp,
-            onClick = onClick
+            onClick = onClick,
+            onLongClick = onLongClick
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(

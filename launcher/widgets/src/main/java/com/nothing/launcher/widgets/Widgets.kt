@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -50,7 +51,7 @@ fun ClockWidget(modifier: Modifier = Modifier) {
         while (true) {
             timeText = currentTime()
             dateText = currentDate()
-            delay(60_000L)
+            delay(1_000L)
         }
     }
 
@@ -93,7 +94,7 @@ fun CompactClockWidget(modifier: Modifier = Modifier) {
         while (true) {
             timeText = currentTime()
             dayName = currentDay()
-            delay(60_000L)
+            delay(1_000L)
         }
     }
 
@@ -119,9 +120,16 @@ private fun currentDay(): String =
 // -----------------------------------------------------------------------------
 @Composable
 fun DateWidget(modifier: Modifier = Modifier) {
-    val date = Date()
-    val dayNumber = SimpleDateFormat("dd", Locale.getDefault()).format(date)
-    val dayName = SimpleDateFormat("EEE", Locale.getDefault()).format(date).uppercase()
+    var dayNumber by remember { mutableStateOf(currentDayNumber()) }
+    var dayName by remember { mutableStateOf(currentDayName()) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            dayNumber = currentDayNumber()
+            dayName = currentDayName()
+            delay(60_000L)
+        }
+    }
 
     Column(
         modifier = modifier
@@ -145,6 +153,12 @@ fun DateWidget(modifier: Modifier = Modifier) {
     }
 }
 
+private fun currentDayNumber(): String =
+    SimpleDateFormat("dd", Locale.getDefault()).format(Date())
+
+private fun currentDayName(): String =
+    SimpleDateFormat("EEE", Locale.getDefault()).format(Date()).uppercase()
+
 // -----------------------------------------------------------------------------
 // Battery Widget (2×1)
 // -----------------------------------------------------------------------------
@@ -153,10 +167,19 @@ fun BatteryWidget(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var level by remember { mutableIntStateOf(getBatteryLevel(context)) }
 
-    LaunchedEffect(Unit) {
+    val receiver = remember {
+        object : android.content.BroadcastReceiver() {
+            override fun onReceive(ctx: android.content.Context?, intent: android.content.Intent?) {
+                intent?.let { level = getBatteryLevel(it) }
+            }
+        }
+    }
+
+    DisposableEffect(context) {
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-        context.registerReceiver(null, filter)?.let { intent ->
-            level = getBatteryLevel(intent)
+        context.registerReceiver(receiver, filter)
+        onDispose {
+            context.unregisterReceiver(receiver)
         }
     }
 
