@@ -37,6 +37,7 @@ fun HomeScreen(
     val pagerState = rememberPagerState(pageCount = { HOME_PAGES })
     val context = LocalContext.current
     var isDrawerOpen by remember { mutableStateOf(false) }
+    var shortcutApp by remember { mutableStateOf<HomeItem.AppIcon?>(null) }
 
     Box(
         modifier = modifier
@@ -75,10 +76,14 @@ fun HomeScreen(
                         HomeEmptyState(onOpenDrawer = { isDrawerOpen = true })
                     } else {
                         HomePage(
+                            page = page,
                             items = pageItems,
                             geometry = geometry,
                             onAppClick = { viewModel.onAppLaunched(it.app) },
-                            onAppLongClick = { viewModel.startDrag(it) }
+                            onAppLongClick = { shortcutApp = it },
+                            onMoveItem = { item, cellX, cellY ->
+                                viewModel.moveItem(item, cellX, cellY, page)
+                            }
                         )
                     }
                 }
@@ -91,6 +96,17 @@ fun HomeScreen(
                 onAddToHome = { app ->
                     viewModel.addAppToHome(app)
                     isDrawerOpen = false
+                }
+            )
+        }
+
+        shortcutApp?.let { item ->
+            AppShortcutsDialog(
+                app = item.app,
+                onDismiss = { shortcutApp = null },
+                onRemoveFromHome = {
+                    viewModel.removeItem(item)
+                    shortcutApp = null
                 }
             )
         }

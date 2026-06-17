@@ -94,6 +94,28 @@ class HomeViewModel @Inject constructor(
             persistLayout(items)
         }
     }
+    fun moveItem(item: HomeItem, cellX: Int, cellY: Int, page: Int) {
+        viewModelScope.launch {
+            val current = homeRepository.observeHomeItems().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList()).value
+            val updated = current.map {
+                if (it.id == item.id) {
+                    when (it) {
+                        is HomeItem.AppIcon -> it.copy(cellX = cellX, cellY = cellY, page = page)
+                        is HomeItem.Folder -> it.copy(cellX = cellX, cellY = cellY, page = page)
+                    }
+                } else it
+            }
+            homeRepository.saveItems(updated)
+        }
+    }
+
+    fun removeItem(item: HomeItem) {
+        viewModelScope.launch {
+            val current = homeRepository.observeHomeItems().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList()).value
+            homeRepository.saveItems(current.filter { it.id != item.id })
+        }
+    }
+
     fun persistLayout(items: List<HomeItem>) {
         viewModelScope.launch {
             homeRepository.saveItems(items)

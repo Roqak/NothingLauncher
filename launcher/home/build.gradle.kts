@@ -43,6 +43,7 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidx.core.ktx)
     implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
     implementation(libs.compose.tooling.preview)
     implementation(libs.lifecycle.viewmodel.compose)

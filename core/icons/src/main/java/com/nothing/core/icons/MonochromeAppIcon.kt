@@ -36,6 +36,7 @@ fun MonochromeAppIcon(
     app: AppModel,
     size: Dp = NothingDimens.IconNormal,
     modifier: Modifier = Modifier,
+    badgeCount: Int = 0,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
@@ -47,28 +48,35 @@ fun MonochromeAppIcon(
     }
 
     Box(
-        modifier = modifier
-            .size(size)
-            .clip(RoundedCornerShape(NothingDimens.IconCornerRadius))
-            .background(NothingColors.Surface)
-            .pointerInput(app.packageName) {
-                detectTapGestures(
-                    onLongPress = {
-                        context.performVirtualKeyHaptic()
-                        onLongClick()
-                    },
-                    onTap = { onClick() }
-                )
-            },
-        contentAlignment = Alignment.Center
+        modifier = modifier.size(size),
+        contentAlignment = Alignment.TopEnd
     ) {
-        bitmap?.let {
-            Image(
-                bitmap = it.asImageBitmap(),
-                contentDescription = app.label,
-                modifier = Modifier.size(size)
-            )
+        Box(
+            modifier = Modifier
+                .size(size)
+                .clip(RoundedCornerShape(NothingDimens.IconCornerRadius))
+                .background(NothingColors.Surface)
+                .pointerInput(app.packageName) {
+                    detectTapGestures(
+                        onLongPress = {
+                            context.performVirtualKeyHaptic()
+                            onLongClick()
+                        },
+                        onTap = { onClick() }
+                    )
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            bitmap?.let {
+                Image(
+                    bitmap = it.asImageBitmap(),
+                    contentDescription = app.label,
+                    modifier = Modifier.size(size)
+                )
+            }
+        }
+        if (badgeCount > 0) {
+            NotificationBadge(count = badgeCount)
         }
     }
 }
-
