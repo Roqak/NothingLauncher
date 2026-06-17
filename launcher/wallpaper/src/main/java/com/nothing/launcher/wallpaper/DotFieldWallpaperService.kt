@@ -13,6 +13,8 @@ import kotlin.random.Random
  * "Dot Field" live wallpaper: animated black/white dot-matrix particles.
  * Battery-aware: reduces target FPS when battery is low.
  */
+private const val PARTICLE_COUNT = 80
+
 class DotFieldWallpaperService : WallpaperService() {
 
     override fun onCreateEngine(): Engine = DotFieldEngine()
@@ -97,16 +99,12 @@ class DotFieldWallpaperService : WallpaperService() {
             }
         }
 
-        private data class Particle(
+        private inner class Particle(
             var x: Float,
             var y: Float,
             val radius: Float,
             var speedX: Float,
             var speedY: Float
         )
-    }
-
-    companion object {
-        private const val PARTICLE_COUNT = 80
     }
 }

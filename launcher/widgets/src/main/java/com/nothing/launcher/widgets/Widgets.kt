@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.nothing.core.data.AppModel
 import com.nothing.core.theme.NothingDimens
-import com.nothing.launcher.home.MonochromeAppIcon
+import com.nothing.core.icons.MonochromeAppIcon
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -70,7 +70,7 @@ fun ClockWidget(modifier: Modifier = Modifier) {
         Text(
             text = dateText,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -106,7 +106,7 @@ fun CompactClockWidget(modifier: Modifier = Modifier) {
         Text(
             text = dayName,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -140,7 +140,7 @@ fun DateWidget(modifier: Modifier = Modifier) {
         Text(
             text = dayName,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -177,7 +177,7 @@ fun BatteryWidget(modifier: Modifier = Modifier) {
         Text(
             text = dotBar(level),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -220,23 +220,25 @@ fun StepWidget(
             )
             .padding(16.dp)
     ) {
+        val ringOutline = MaterialTheme.colorScheme.outline
+        val ringProgress = MaterialTheme.colorScheme.onBackground
         Box(
             modifier = Modifier.size(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            Canvas(modifier = Modifier.fillMaxWidth()) {
+        Canvas(modifier = Modifier.fillMaxWidth()) {
                 val strokeWidth = 8.dp.toPx()
                 val radius = size.minDimension / 2f - strokeWidth
 
                 drawArc(
-                    color = MaterialTheme.colorScheme.outline,
+                    color = ringOutline,
                     startAngle = -90f,
                     sweepAngle = 360f,
                     useCenter = false,
                     style = Stroke(strokeWidth, cap = StrokeCap.Round)
                 )
                 drawArc(
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = ringProgress,
                     startAngle = -90f,
                     sweepAngle = 360f * progress,
                     useCenter = false,
@@ -252,7 +254,7 @@ fun StepWidget(
         Text(
             text = "Steps",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -284,13 +286,13 @@ fun WeatherWidget(
             Text(
                 text = "C",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackgroundMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         Text(
             text = city,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -324,7 +326,7 @@ fun MusicWidget(
         Text(
             text = artist,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -350,7 +352,7 @@ fun ShortcutWidget(
         Text(
             text = "Shortcuts",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Row(

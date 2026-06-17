@@ -1,6 +1,7 @@
 package com.nothing.core.data
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.LauncherApps
 import android.os.Build
 import android.os.UserHandle
@@ -36,7 +37,7 @@ class AppRepository @Inject constructor(
         val profiles = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             userManager.userProfiles
         } else {
-            listOf(UserHandle.getUserHandleForUserId(0))
+            listOf(android.os.Process.myUserHandle())
         }
 
         for (profile in profiles) {

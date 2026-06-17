@@ -1,4 +1,5 @@
 plugins {
+    id("com.google.dagger.hilt.android")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
@@ -24,13 +25,16 @@ android {
 }
 
 dependencies {
+    implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.preferences.datastore)
+
     ksp(libs.room.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
 }

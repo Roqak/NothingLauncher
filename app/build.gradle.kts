@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
@@ -22,13 +23,24 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("/tmp/nothing-launcher.keystore")
+            storePassword = "nothinglauncher"
+            keyAlias = "nothinglauncher"
+            keyPassword = "nothinglauncher"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -45,9 +57,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
 
     packaging {
         resources {
@@ -72,6 +81,7 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.tooling.preview)

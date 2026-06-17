@@ -2,6 +2,7 @@ package com.nothing.core.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.nothing.core.data.AppRepository
 import com.nothing.core.data.LauncherDatabase
 import com.nothing.core.data.LauncherPreferences
 import dagger.Module

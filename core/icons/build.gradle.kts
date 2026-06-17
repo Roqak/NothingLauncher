@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -20,10 +21,22 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
+    implementation(project(":core:theme"))
+    implementation(project(":core:data"))
+    implementation(project(":core:utils"))
+
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
 
     testImplementation(libs.junit)
 }

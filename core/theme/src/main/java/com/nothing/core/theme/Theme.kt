@@ -67,7 +67,7 @@ fun NothingLauncherTheme(
         bodyLarge = typography.bodyLarge,
         bodyMedium = typography.bodyMedium,
         bodySmall = typography.bodySmall,
-        labelLarge = typography.labelSection,
+        labelLarge = typography.bodySmall,
         titleMedium = typography.contextMenuItem
     )
 

@@ -72,7 +72,7 @@ fun SettingsScreen(
         Text(
             text = "Nothing Launcher v1.0.0",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackgroundMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(vertical = 12.dp)
         )
     }
@@ -82,8 +82,8 @@ fun SettingsScreen(
 private fun SectionHeader(title: String) {
     Text(
         text = title.uppercase(),
-        style = MaterialTheme.typography.labelSection,
-        color = MaterialTheme.colorScheme.onBackgroundMuted,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(top = 24.dp, bottom = 8.dp)
     )
 }

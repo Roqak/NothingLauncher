@@ -38,7 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nothing.core.data.AppModel
 import com.nothing.core.theme.NothingColors
 import com.nothing.core.theme.NothingDimens
-import com.nothing.launcher.home.MonochromeAppIcon
+import com.nothing.core.icons.MonochromeAppIcon
 
 @Composable
 fun AppDrawer(
@@ -145,7 +145,7 @@ private fun SearchBar(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search",
-                    tint = MaterialTheme.colorScheme.onBackgroundMuted,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -153,7 +153,7 @@ private fun SearchBar(
                     if (query.isEmpty()) {
                         Text(
                             text = "Search apps",
-                            color = MaterialTheme.colorScheme.onBackgroundMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -172,8 +172,8 @@ private fun RecentAppsRow(
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         Text(
             text = "Recent",
-            style = MaterialTheme.typography.labelSection,
-            color = MaterialTheme.colorScheme.onBackgroundMuted,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Row {

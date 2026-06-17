@@ -1,8 +1,9 @@
 plugins {
+    id("com.google.dagger.hilt.android")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -27,16 +28,14 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
 }
 
 dependencies {
+    implementation(libs.hilt.android)
     implementation(project(":core:theme"))
     implementation(project(":core:data"))
-    implementation(project(":core:icons"))
     implementation(project(":core:utils"))
+    implementation(project(":core:icons"))
     implementation(project(":launcher:dock"))
     implementation(project(":launcher:drawer"))
 
@@ -47,6 +46,6 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.tooling.preview)
     implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.hilt.android)
+
     ksp(libs.hilt.compiler)
 }
