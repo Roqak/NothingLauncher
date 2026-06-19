@@ -1,9 +1,7 @@
-package com.nothing.launcher.home
+package com.nothing.core.data
 
 import android.content.Context
-import com.nothing.core.data.AppModel
 import com.nothing.core.data.AppRepository
-import com.nothing.core.data.HomeItemEntity
 import com.nothing.core.data.HomeItemDao
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -26,8 +24,22 @@ class HomeRepository @Inject constructor(
         }
     }
 
+    /**
+     * Persisted dock icons as domain objects, joined with live app data.
+     */
+    fun observeDockItems(): Flow<List<HomeItem>> {
+        return homeItemDao.observeItems("DOCK").map { entities ->
+            entities.mapNotNull { it.toHomeItem() }
+        }
+    }
+
     suspend fun saveItems(items: List<HomeItem>) {
-        val entities = items.map { it.toEntity() }
+        val entities = items.map { it.toEntity(container = "HOME") }
+        homeItemDao.insertAll(entities)
+    }
+
+    suspend fun saveDockItems(items: List<HomeItem>) {
+        val entities = items.map { it.toEntity(container = "DOCK") }
         homeItemDao.insertAll(entities)
     }
 
@@ -45,14 +57,14 @@ class HomeRepository @Inject constructor(
         )
     }
 
-    private fun HomeItem.toEntity(): HomeItemEntity {
+    private fun HomeItem.toEntity(container: String): HomeItemEntity {
         return when (this) {
             is HomeItem.AppIcon -> HomeItemEntity(
                 id = id,
                 itemType = "ICON",
                 packageName = app.packageName,
                 activityName = app.activityName,
-                container = "HOME",
+                container = container,
                 page = page,
                 cellX = cellX,
                 cellY = cellY,
@@ -63,7 +75,7 @@ class HomeRepository @Inject constructor(
                 itemType = "FOLDER",
                 packageName = null,
                 activityName = null,
-                container = "HOME",
+                container = container,
                 page = page,
                 cellX = cellX,
                 cellY = cellY,

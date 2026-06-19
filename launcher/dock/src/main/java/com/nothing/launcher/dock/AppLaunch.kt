@@ -1,9 +1,8 @@
-package com.nothing.launcher.home
+package com.nothing.launcher.dock
 
 import android.content.Context
 import android.content.Intent
 import com.nothing.core.data.AppModel
-import com.nothing.core.data.HomeItem
 
 fun Context.launchApp(app: AppModel) {
     val intent = packageManager.getLaunchIntentForPackage(app.packageName)

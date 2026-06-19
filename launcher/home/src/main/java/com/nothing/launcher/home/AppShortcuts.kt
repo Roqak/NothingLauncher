@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Process
 import android.os.UserHandle
 import com.nothing.core.data.AppModel
+import com.nothing.core.data.HomeItem
 
 fun Context.getAppShortcuts(app: AppModel): List<ShortcutInfoWrapper> {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return emptyList()

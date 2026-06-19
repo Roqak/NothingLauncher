@@ -1,4 +1,4 @@
-package com.nothing.launcher.home
+package com.nothing.core.data
 
 import com.nothing.core.data.AppModel
 

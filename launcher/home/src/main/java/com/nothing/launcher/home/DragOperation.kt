@@ -1,5 +1,6 @@
 package com.nothing.launcher.home
 
+import com.nothing.core.data.HomeItem
 import androidx.compose.runtime.Stable
 
 /**

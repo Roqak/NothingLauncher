@@ -3,7 +3,9 @@ package com.nothing.launcher.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nothing.core.data.AppModel
+import com.nothing.core.data.HomeItem
 import com.nothing.core.data.AppRepository
+import com.nothing.core.data.HomeRepository
 import com.nothing.core.data.LauncherPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

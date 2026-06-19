@@ -22,11 +22,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nothing.core.data.AppModel
 import com.nothing.core.icons.MonochromeIconProcessor
 import com.nothing.core.theme.NothingColors
 import com.nothing.core.theme.NothingDimens
 import com.nothing.core.utils.performVirtualKeyHaptic
+import com.nothing.core.utils.BadgeCounter
 
 /**
  * Renders a single monochrome app icon on the home screen.
@@ -36,12 +38,14 @@ fun MonochromeAppIcon(
     app: AppModel,
     size: Dp = NothingDimens.IconNormal,
     modifier: Modifier = Modifier,
-    badgeCount: Int = 0,
+    badgeCount: Int? = null,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+    val counts by BadgeCounter.badgeCounts.collectAsStateWithLifecycle()
+    val effectiveBadge = badgeCount ?: (counts[app.packageName] ?: 0)
 
     LaunchedEffect(app.packageName) {
         bitmap = MonochromeIconProcessor(context).loadMonochromeIcon(app.packageName)
@@ -75,8 +79,8 @@ fun MonochromeAppIcon(
                 )
             }
         }
-        if (badgeCount > 0) {
-            NotificationBadge(count = badgeCount)
+        if (effectiveBadge > 0) {
+            NotificationBadge(count = effectiveBadge)
         }
     }
 }

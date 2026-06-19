@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.nothing.core.data.AppModel
+import com.nothing.core.data.HomeItem
 
 @Composable
 fun AppShortcutsDialog(
